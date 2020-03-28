@@ -8,8 +8,8 @@ import moment from 'moment'
 
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
-import Replay5Icon from '@material-ui/icons/Replay5';
-import Forward5Icon from '@material-ui/icons/Forward5';
+import Replay10Icon from '@material-ui/icons/Replay10';
+import Forward10Icon from '@material-ui/icons/Forward10';
 
 const styles = {
   width: "100vw",
@@ -20,7 +20,7 @@ const styles = {
 const useStyles = makeStyles(theme => ({
   box: {
     position: 'absolute',
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 10,
   }
 }));
@@ -45,9 +45,9 @@ const App = () => {
     const initializeMap = ({ setMap, mapContainer }) => {
       const map = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v11",
+        style: 'mapbox://styles/mapbox/dark-v10',
         center: [138.2529, 36.2048],
-        zoom: 5
+        zoom: 4
       });
 
       map.on('load', () => {
@@ -63,6 +63,9 @@ const App = () => {
     if (pause) {
       return;
     }
+    if (count < 0) {
+      setCount(0);
+    }
     if (count > 18) {
       setCount(1);
     }
@@ -77,8 +80,8 @@ const App = () => {
       <div ref={el => (mapContainer.current = el)} style={styles} />
       <div className={classes.box} style={{
         width: 300,
-        height: '50vh',
-        top: 10,
+        height: 150,
+        bottom: 10,
         right: 10
       }} />
       <div className={classes.box} style={{
@@ -86,8 +89,9 @@ const App = () => {
         marginRight: 'auto',
         left: 0,
         right: 0,
-        bottom: 30,
-        width: 400,
+        top: 15,
+        // width: 400,
+        maxWidth: 860,
         height: 100,
       }} >
         <Grid
@@ -103,13 +107,13 @@ const App = () => {
               min={1}
               step={1}
               max={18}
-              valueLabelFormat={(value) => {
-                if (time != null)
-                 return moment(time).add(value*10, 'minutes').format('hh:mm');
-                else
-                  return '';
-              }}
-              valueLabelDisplay="on"
+              // valueLabelFormat={(value) => {
+              //   if (time != null)
+              //     return moment(time).add(value * 10, 'minutes').format('hh:mm');
+              //   else
+              //     return '';
+              // }}
+              // valueLabelDisplay="on"
             />
           </Grid>
           <Grid
@@ -122,19 +126,19 @@ const App = () => {
               alignItems="center"
             >
               <Grid item>
-                <IconButton>
-                  <Replay5Icon />
+                <IconButton onClick={() => setCount(count - 1)} style={{ color: 'white' }}>
+                  <Replay10Icon />
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton onClick={() => setPause(!pause)}>
+                <IconButton onClick={() => setPause(!pause)} style={{ color: 'white' }}>
                   {pause && <PlayArrowIcon />}
                   {!pause && <PauseIcon />}
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton>
-                  <Forward5Icon />
+                <IconButton onClick={() => setCount(count + 1)} style={{ color: 'white' }}>
+                  <Forward10Icon />
                 </IconButton>
               </Grid>
             </Grid>
