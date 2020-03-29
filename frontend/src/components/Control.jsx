@@ -14,6 +14,54 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 20,
   },
+  pickerInput: {
+    color: 'white'
+  },
+  picker: {
+    color: 'white',
+    '& label': {
+      color: 'white',
+    },
+    '& label.Mui-focused': {
+      color: 'white',
+      fontWeight: 'bold'
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#bfbfbf',
+      },
+      '&:hover fieldset': {
+        borderColor: 'white',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'white',
+      },
+    },
+    width: '100%',
+    maxWidth: '500px'
+  },
+  inputForm: {
+    display: 'flex',
+    margin: 'auto',
+  },
+  inputGrid: {
+    height: '100%'
+  },
+  inspectButton: {
+    height: '100%',
+    width: '100%',
+    boxShadow: 'none',
+    color: 'white',
+    border: 'solid 1px #bfbfbf',
+    '&:hover': {
+      color: 'black',
+      backgroundColor: "#FFF",
+      border: 'solid 1px white',
+    }
+  },
 }));
 
 const Control = (props) => {
@@ -36,10 +84,12 @@ const Control = (props) => {
             height: 150,
           }}>
             <DateTimePicker
-              label="DateTimePicker"
-              inputVariant="outlined"
+              label='DateTimePicker'
+              inputVariant='outlined'
               value={selectedDate}
               onChange={handleDateChange}
+              className={classes.picker}
+              InputProps={{ className: classes.pickerInput }}
             />
           </div>
         </div>

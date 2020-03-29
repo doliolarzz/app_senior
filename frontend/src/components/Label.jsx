@@ -7,12 +7,14 @@ const useStyles = makeStyles(theme => ({
   box: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 5,
+    width: 'fit-content',
+    margin: '0 auto'
   },
   labelText: {
     color: 'white', 
     textAlign: 'center', 
     margin: 10,
-    fontWeight: 500
+    fontWeight: 400
   }
 }));
 
@@ -32,20 +34,14 @@ const Label = (props) => {
       alignItems: 'center',
     }}>
       <div style={{ flex: 1 }}>
-        <div className={classes.box} style={{
-          width: 'fit-content',
-          margin: '0 auto'
-        }}>
+        <div className={classes.box}>
           <Typography variant='h4' className={classes.labelText}>
             {'Ground Truth'}
           </Typography>
         </div>
       </div>
       <div style={{ flex: 1 }}>
-        <div className={classes.box} style={{
-          width: 'fit-content',
-          margin: '0 auto'
-        }}>
+        <div className={classes.box}>
           <Typography variant='h4' className={classes.labelText}>
             {'Prediction'}
           </Typography>
