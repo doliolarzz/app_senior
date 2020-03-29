@@ -12,7 +12,8 @@ import Forward10Icon from '@material-ui/icons/Forward10';
 const useStyles = makeStyles(theme => ({
   box: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 20,
+    borderRadius: 10,
+    backdropFilter: 'blur(10px)'
   },
   pickerInput: {
     color: 'white'
