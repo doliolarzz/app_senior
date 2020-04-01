@@ -186,7 +186,7 @@ const Control = (props) => {
             alignItems: 'center',
           }}>
             <div style={{
-              flex: 1,
+              flex: 2,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-around',
@@ -205,7 +205,7 @@ const Control = (props) => {
             </div>
             <Divider orientation='vertical' style={{ backgroundColor: 'white', marginLeft: 20, marginRight: 20 }} />
             <div style={{
-              flex: 1,
+              flex: 3,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-around',
