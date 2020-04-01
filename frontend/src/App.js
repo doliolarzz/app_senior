@@ -22,7 +22,8 @@ const App = () => {
   const [count, setCount] = useState(1);
   const countRef = useRef(count);
   const [pause, setPause] = useState(true);
-
+  const [mapSync, setMapSync] = useState(true);
+  
   const classes = useStyles();
 
   useEffect(() => {
@@ -47,8 +48,8 @@ const App = () => {
 
   return (
     <div>
-      <Maps mapSync={true} />
-      <Control />
+      <Maps mapSync={mapSync} />
+      <Control mapSync={mapSync} setMapSync={setMapSync}/>
       <Label />
     </div>
   );

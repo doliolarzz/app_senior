@@ -43,8 +43,16 @@ const theme = createMuiTheme({
       rail: {
         color: 'white',
       }
-    }
-  }
+    },
+    MuiCheckbox: {
+      colorSecondary: {
+        color: '#FFF',
+        '&$checked': {
+          color: '#FFF',
+        },
+      },
+    },
+  },
 });
 
 ReactDOM.render(
