@@ -77,12 +77,19 @@ const Maps = (props) => {
     if (!predMap) initializeMap(setPredMap, predMapContainer);
   }, [predMap]);
 
+  useEffect(() => {
+    if (gtMap != null) gtMap.resize();
+    if (predMap != null) predMap.resize();
+  }, [props.mapView, props.multiView]);
+
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div className={classes.map} ref={el => (gtMapContainer.current = el)} />
-        <div style={{ width: 4, height: '100vh', backgroundColor: '#ffe100' }} />
-        <div className={classes.map} ref={el => (predMapContainer.current = el)} />
+        <div className={classes.map} ref={el => (gtMapContainer.current = el)} style={{ display: (props.multiView == 'multi') || (props.mapView == 'gt') ? null : 'none' }} />
+        {props.multiView == 'multi' &&
+          <div style={{ width: 4, height: '100vh', backgroundColor: '#ffe100' }} />
+        }
+        <div className={classes.map} ref={el => (predMapContainer.current = el)} style={{ display: (props.multiView == 'multi') || (props.mapView == 'pred') ? null : 'none' }} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { Slider, Checkbox, IconButton, FormControlLabel, Typography, Tooltip, Divider } from '@material-ui/core';
+import { Slider, Checkbox, IconButton, FormControlLabel, Typography, Tooltip, Divider, Select, MenuItem } from '@material-ui/core';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import moment from 'moment'
 import { DateTimePicker } from "@material-ui/pickers";
 
@@ -8,6 +9,10 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import Replay10Icon from '@material-ui/icons/Replay10';
 import Forward10Icon from '@material-ui/icons/Forward10';
+import ImageIcon from '@material-ui/icons/Image';
+import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
+import AspectRatioIcon from '@material-ui/icons/AspectRatio';
 
 const useStyles = makeStyles(theme => ({
   box: {
@@ -44,6 +49,29 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     marginTop: 10,
   },
+  toggle: {
+    margin: theme.spacing(0.5),
+    border: 'none',
+    padding: theme.spacing(0, 1),
+    '&:not(:first-child)': {
+      borderRadius: theme.shape.borderRadius,
+    },
+    '&:first-child': {
+      borderRadius: theme.shape.borderRadius,
+    },
+  },
+  toggleRoot: {
+    backgroundColor: 'rgba(62, 62, 62, 0.25)',
+  },
+  toggleLabel: {
+    color: '#FFF'
+  },
+  toggleSelected: {
+    backgroundColor: 'rgba(255, 255, 255, 0.25) !important'
+  },
+  toggleRootBtn: {
+    // height: 85
+  },
 }));
 
 function ValueLabelComponent(props) {
@@ -70,7 +98,7 @@ const Control = (props) => {
   const [count, setCount] = useState(1);
   const countRef = useRef(count);
   const [pause, setPause] = useState(false);
-  const cellHeight = 110;
+  const cellHeight = 150;
 
   useEffect(() => {
     setTime(new moment());
@@ -108,8 +136,8 @@ const Control = (props) => {
             height: cellHeight,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start'
+            justifyContent: 'center',
+            alignItems: 'center'
           }}>
             <DateTimePicker
               label='Start Date and Time'
@@ -118,19 +146,122 @@ const Control = (props) => {
               onChange={handleDateChange}
               className={classes.picker}
               InputProps={{ className: classes.pickerInput }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={props.mapSync}
-                  onChange={(event) => props.setMapSync(event.target.checked)}
-                />
-              }
-              label="Sync Two Map"
-              style={{ color: 'white' }}
+              format='ddd DD MMM YYYY HH:mm'
             />
           </div>
         </div>
+        <div style={{ flex: 1, padding: 10 }}>
+          <div className={classes.box} style={{
+            padding: 20,
+            height: cellHeight,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <ToggleButtonGroup
+              classes={{
+                grouped: classes.toggle,
+                root: classes.toggleRoot
+              }}
+              value={props.multiView}
+              exclusive
+              onChange={(event, value) => {
+                if (value != null) {
+                  props.setMultiView(value);
+                }
+              }}
+            >
+              <ToggleButton
+                value='single'
+                classes={{
+                  label: classes.toggleLabel,
+                  selected: classes.toggleSelected,
+                  root: classes.toggleRootBtn
+                }}
+              >
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <ImageIcon />
+                  <span style={{ marginLeft: 5 }}>Single View</span>
+                </div>
+              </ToggleButton>
+              <ToggleButton
+                value='multi'
+                classes={{
+                  label: classes.toggleLabel,
+                  selected: classes.toggleSelected,
+                  root: classes.toggleRootBtn
+                }}
+              >
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <PhotoLibraryIcon />
+                  <span style={{ marginLeft: 5 }}>Multi View</span>
+                </div>
+              </ToggleButton>
+            </ToggleButtonGroup>
+            {props.multiView == 'single' &&
+              <>
+                <Typography variant='body1' style={{ color: '#FFF', marginTop: 10, fontWeight: 500 }}>
+                  {`Image Type`}
+                </Typography>
+                <ToggleButtonGroup
+                  classes={{
+                    grouped: classes.toggle,
+                    root: classes.toggleRoot
+                  }}
+                  value={props.mapView}
+                  exclusive
+                  onChange={(event, value) => {
+                    if (value != null) {
+                      props.setMapView(value);
+                    }
+                  }}
+                >
+                  <ToggleButton
+                    value='gt'
+                    classes={{
+                      label: classes.toggleLabel,
+                      selected: classes.toggleSelected,
+                      root: classes.toggleRootBtn
+                    }}
+                  >
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <AspectRatioIcon />
+                      <span style={{ marginLeft: 5 }}>Label</span>
+                    </div>
+                  </ToggleButton>
+                  <ToggleButton
+                    value='pred'
+                    classes={{
+                      label: classes.toggleLabel,
+                      selected: classes.toggleSelected,
+                      root: classes.toggleRootBtn
+                    }}
+                  >
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <SettingsOverscanIcon />
+                      <span style={{ marginLeft: 5 }}>Prediction</span>
+                    </div>
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </>
+            }
+            {props.multiView == 'multi' &&
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={props.mapSync}
+                    onChange={(event) => props.setMapSync(event.target.checked)}
+                  />
+                }
+                label='Sync Two Map'
+                style={{ color: 'white' }}
+              />
+            }
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 4, display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1, padding: 10 }}>
           <div className={classes.box} style={{
             padding: 20,
@@ -174,9 +305,7 @@ const Control = (props) => {
             </div>
           </div>
         </div>
-      </div>
-      <div style={{ flex: 4 }}>
-        <div style={{ padding: 10 }}>
+        <div style={{ flex: 1, padding: 10 }}>
           <div className={classes.box} style={{
             padding: 20,
             height: cellHeight,

@@ -23,7 +23,9 @@ const App = () => {
   const countRef = useRef(count);
   const [pause, setPause] = useState(true);
   const [mapSync, setMapSync] = useState(true);
-  
+  const [mapView, setMapView] = useState('pred');
+  const [multiView, setMultiView] = useState('multi');
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -48,8 +50,19 @@ const App = () => {
 
   return (
     <div>
-      <Maps mapSync={mapSync} />
-      <Control mapSync={mapSync} setMapSync={setMapSync}/>
+      <Maps 
+        mapSync={mapSync} 
+        mapView={mapView}
+        multiView={multiView}
+      />
+      <Control 
+        mapSync={mapSync} 
+        setMapSync={setMapSync} 
+        mapView={mapView}
+        setMapView={setMapView}
+        multiView={multiView}
+        setMultiView={setMultiView}
+      />
       <Label />
     </div>
   );
