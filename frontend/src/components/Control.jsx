@@ -291,6 +291,7 @@ const Control = (props) => {
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
+              marginTop: 15,
             }}>
               <IconButton onClick={() => setCount(count - 1)} style={{ color: 'white' }}>
                 <Replay10Icon />
@@ -305,20 +306,21 @@ const Control = (props) => {
             </div>
           </div>
         </div>
-        <div style={{ flex: 1, padding: 10 }}>
+        <div style={{ flex: 2, padding: 10 }}>
           <div className={classes.box} style={{
             padding: 20,
             height: cellHeight,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-around',
-            alignItems: 'center',
+            alignItems: 'flex-start',
+            overflow: 'auto'
           }}>
             <div style={{
               flex: 2,
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-around',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
               height: '100%'
             }}>
@@ -337,9 +339,10 @@ const Control = (props) => {
               flex: 3,
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-around',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
-              height: '100%'
+              height: '100%',
+              marginButtom: 10,
             }}>
               <Typography variant='body1' style={{ color: '#FFF' }}>
                 {`Binary CSI: ...`}

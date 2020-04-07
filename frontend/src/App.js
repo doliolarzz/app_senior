@@ -63,7 +63,10 @@ const App = () => {
         multiView={multiView}
         setMultiView={setMultiView}
       />
-      <Label />
+      <Label 
+        mapView={mapView}
+        multiView={multiView}
+      />
     </div>
   );
 }

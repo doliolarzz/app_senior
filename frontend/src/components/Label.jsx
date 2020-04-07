@@ -11,8 +11,8 @@ const useStyles = makeStyles(theme => ({
     margin: '0 auto'
   },
   labelText: {
-    color: 'white', 
-    textAlign: 'center', 
+    color: 'white',
+    textAlign: 'center',
     margin: 10,
     fontWeight: 400
   }
@@ -33,20 +33,24 @@ const Label = (props) => {
       justifyContent: 'center',
       alignItems: 'center',
     }}>
-      <div style={{ flex: 1 }}>
-        <div className={classes.box}>
-          <Typography variant='h4' className={classes.labelText}>
-            {'Ground Truth'}
-          </Typography>
+      {((props.multiView == 'multi') || (props.mapView == 'gt')) &&
+        <div style={{ flex: 1 }}>
+          <div className={classes.box}>
+            <Typography variant='h4' className={classes.labelText}>
+              {'Ground Truth'}
+            </Typography>
+          </div>
         </div>
-      </div>
-      <div style={{ flex: 1 }}>
-        <div className={classes.box}>
-          <Typography variant='h4' className={classes.labelText}>
-            {'Prediction'}
-          </Typography>
+      }
+      {((props.multiView == 'multi') || (props.mapView == 'pred')) &&
+        <div style={{ flex: 1 }}>
+          <div className={classes.box}>
+            <Typography variant='h4' className={classes.labelText}>
+              {'Prediction'}
+            </Typography>
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 }
