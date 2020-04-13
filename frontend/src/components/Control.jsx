@@ -103,16 +103,12 @@ function ValueLabelComponent(props) {
 const Control = (props) => {
 
   const classes = useStyles();
-  const [selectedDate, handleDateChange] = useState(new Date());
-  const [time, setTime] = useState(null);
-  const [count, setCount] = useState(1);
+  // const [selectedDate, handleDateChange] = useState(new Date());
+  const [time, setTime] = useState(new Date('2019-09-13'));
+  const [count, setCount] = useState(0);
   const countRef = useRef(count);
-  const [pause, setPause] = useState(false);
+  const [pause, setPause] = useState(true);
   const cellHeight = 150;
-
-  useEffect(() => {
-    setTime(new moment());
-  }, []);
 
   useEffect(() => {
     if (pause) {
@@ -149,10 +145,14 @@ const Control = (props) => {
           alignItems: 'center'
         }}>
           <DateTimePicker
+            disableFuture
+            minDate={new Date('2019-09-12')}
+            maxDate={new Date('2019-11-12')}
+            minutesStep={10}
             label='Start Date and Time'
             inputVariant='outlined'
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={time}
+            onChange={setTime}
             className={classes.picker}
             InputProps={{ className: classes.pickerInput }}
             format='ddd DD MMM YYYY HH:mm'
@@ -290,13 +290,13 @@ const Control = (props) => {
           <div style={{ height: 30, width: '100%' }} />
           <Slider
             value={count}
-            min={1}
+            min={0}
             step={1}
-            max={18}
+            max={17}
             ValueLabelComponent={ValueLabelComponent}
             valueLabelFormat={(value) => {
               if (time != null)
-                return moment(time).add(value * 10, 'minutes').format('hh:mm');
+                return moment(time).add(value * 10, 'minutes').format('ddd DD MMM YYYY HH:mm');
               else
                 return '';
             }}
