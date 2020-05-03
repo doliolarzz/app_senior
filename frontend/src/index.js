@@ -7,6 +7,8 @@ import * as serviceWorker from './serviceWorker';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import MomentUtils from '@date-io/moment';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 const theme = createMuiTheme({
   palette: {
@@ -58,9 +60,9 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      {/* <Provider store={store}> */}
-      <App />
-      {/* </Provider> */}
+      <Provider store={store}>
+        <App />
+      </Provider>
     </MuiPickersUtilsProvider>
   </MuiThemeProvider>,
   document.getElementById('root')

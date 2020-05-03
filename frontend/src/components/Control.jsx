@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Slider, Checkbox, IconButton, FormControlLabel, Typography, Tooltip, Divider, Select, MenuItem } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import moment from 'moment'
 import { DateTimePicker } from "@material-ui/pickers";
+
+import { getMetricsDataRequest, getImagesDataRequest } from '../store/actions/data';
 
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
@@ -103,8 +106,7 @@ function ValueLabelComponent(props) {
 const Control = (props) => {
 
   const classes = useStyles();
-  // const [selectedDate, handleDateChange] = useState(new Date());
-  const [time, setTime] = useState(new Date('2019-09-13'));
+  const [time, setTime] = useState(new Date(2019, 10, 12, 0, 0, 0, 0));
   const [count, setCount] = useState(0);
   const countRef = useRef(count);
   const [pause, setPause] = useState(true);
@@ -126,6 +128,10 @@ const Control = (props) => {
     return () => clearInterval(intervalId);
   }, [count, pause]);
 
+  useEffect(() => {
+    props.getImagesDataRequest({ dt: '20191012_2120' })
+  }, []);
+
   return (
     <div style={{
       position: 'absolute',
@@ -146,8 +152,8 @@ const Control = (props) => {
         }}>
           <DateTimePicker
             disableFuture
-            minDate={new Date('2019-09-12')}
-            maxDate={new Date('2019-11-12')}
+            minDate={new Date(2019, 10, 12, 0, 0, 0, 0)}
+            maxDate={new Date(2019, 10, 12, 23, 50, 0, 0)}
             minutesStep={10}
             label='Start Date and Time'
             inputVariant='outlined'
@@ -287,7 +293,10 @@ const Control = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-          <div style={{ height: 30, width: '100%' }} />
+          {/* <div style={{ height: 30, width: '100%' }} /> */}
+          <Typography variant='h6' style={{ color: '#FFF' }}>
+            {time != null && moment(time).add(count * 10, 'minutes').format('ddd DD MMM YYYY HH:mm')}
+          </Typography>
           <Slider
             value={count}
             min={0}
@@ -300,7 +309,7 @@ const Control = (props) => {
               else
                 return '';
             }}
-            valueLabelDisplay="on"
+          // valueLabelDisplay="on"
           />
           <div style={{
             display: 'flex',
@@ -382,4 +391,12 @@ const Control = (props) => {
   );
 }
 
-export default Control;
+const mapStateToProps = (state) => {
+  return {
+    loadingImgs: state.data.loadingImgs,
+    imgs: state.data.imgs,
+    loadingMetrics: state.data.loadingMetrics,
+    metrics: state.data.metrics,
+  }
+}
+export default connect(mapStateToProps, { getMetricsDataRequest, getImagesDataRequest })(Control);

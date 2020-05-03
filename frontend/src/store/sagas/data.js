@@ -1,28 +1,29 @@
-import { takeEvery, call, fork, put } from 'redux-saga/effects';
+import { takeEvery, call, fork, put, all } from 'redux-saga/effects';
 import * as actions from '../actions/data';
 import * as api from '../api/data';
 var JSZip = require('jszip');
 
-function* fetchDataRange() {
+function* fetchMetricsData(action) {
     try {
-        const data = yield call(api.getCVITable);
-        yield put(actions.getDataRangeSuccess({ ...data }))
-    } catch(e) {
-        yield put(actions.getDataRangeFailed({ error: e.message }))
+        const data = yield call(api.getMetricsData, { dt: action.payload.dt });
+        yield put(actions.getMetricsDataSuccess({ ...data }))
+    } catch (e) {
+        yield put(actions.getMetricsDataFailed({ error: e.message }))
     }
 }
-function* watchFetchDataRange() {
-    yield takeEvery(actions.Types.GET_DATA_RANGE_REQUEST, fetchDataRange);
+function* watchFetchMetricsData() {
+    yield takeEvery(actions.Types.GET_METRICS_DATA_REQUEST, fetchMetricsData);
 }
 
 function* fetchImagesData(action) {
+    const getImg = (itype, n) => call(api.getImagesData, { dt: action.payload.dt, itype, n });
     try {
-        const data = yield call(api.getCompareRegion, { time: action.payload.time });
-        const imgs =  yield call(JSZip.loadAsync(data).then(function (zip) {
-            return zip.file("content.txt").async("string");
+        const pred = yield all([...Array(18).keys()].map((_, i) => getImg('pred', i)));
+        const label = yield all([...Array(18).keys()].map((_, i) => getImg('label', i)));
+        yield put(actions.getImagesDataSuccess({
+            data: { pred: pred.map((v) => v.data.img), label: label.map((v) => v.data.img) }
         }))
-        yield put(actions.getImagesDataSuccess({ ...data }))
-    } catch(e) {
+    } catch (e) {
         yield put(actions.getImagesDataFailed({ error: e.message }))
     }
 }
@@ -31,7 +32,7 @@ function* watchFetchImagesData() {
 }
 
 const DataSagas = [
-    fork(watchFetchDataRange),
+    fork(watchFetchMetricsData),
     fork(watchFetchImagesData),
 ];
 
