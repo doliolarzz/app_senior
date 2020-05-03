@@ -29,5 +29,5 @@ class Metrics(APIView):
         metrics = list(np.loadtxt(os.path.join(path, dt, 'metrics.txt')))
         return JsonResponse({'metrics': {
             'csi': metrics[:-3],
-            'mse': metrics[-3:]
+            'rmse': metrics[-3:]
         }})

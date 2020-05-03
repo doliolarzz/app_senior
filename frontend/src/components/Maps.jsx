@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const bound = [[118.006, 20.005], [149.994, 60.9958]];
+const bound = [[100.006, 20.005], [160.994, 60.9958]];
 const imgBounds = [[118.006, 20.005], [149.994, 47.9958]];
 
 const initializeMap = (setMap, mapContainer) => {
@@ -82,6 +83,31 @@ const Maps = (props) => {
     if (predMap != null) predMap.resize();
   }, [props.mapView, props.multiView]);
 
+  useEffect(() => {
+    if (props.imgs == null) return;
+    if ((gtMap == null) || (predMap == null)) return;
+    const maps = [gtMap, predMap];
+    ['pred', 'label'].map((v, i) => {
+      maps[i].addSource("img", {
+        "type": "image",
+        "url": "data:image/png;base64," + props.imgs[v][0],
+        "coordinates": [
+          [imgBounds[0][0], imgBounds[1][1]],
+          [imgBounds[1][0], imgBounds[1][1]],
+          [imgBounds[1][0], imgBounds[0][1]],
+          [imgBounds[0][0], imgBounds[0][1]],
+        ]
+      });
+
+      maps[i].addLayer({
+        "id": "overlay",
+        "source": "img",
+        "type": "raster",
+        "paint": {"raster-opacity": 0.75}
+      });
+    })
+  }, [props.imgs, gtMap, predMap]);
+
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -95,4 +121,10 @@ const Maps = (props) => {
   );
 }
 
-export default Maps;
+const mapStateToProps = (state) => {
+  return {
+    loadingImgs: state.data.loadingImgs,
+    imgs: state.data.imgs,
+  }
+}
+export default connect(mapStateToProps, {})(Maps);

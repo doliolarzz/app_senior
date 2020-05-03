@@ -2,9 +2,10 @@ import { Types } from '../actions/data';
 
 const INIT_STATE = {
   loadingImgs: false,
-  imgs: [],
+  imgs: null,
   loadingMetrics: false,
-  metrics: {},
+  metrics: null,
+  count: 0
 }
 
 export default function data(state = INIT_STATE, action) {
@@ -13,7 +14,7 @@ export default function data(state = INIT_STATE, action) {
       return {
         ...state,
         loadingMetrics: true,
-        metrics: {},
+        metrics: null,
       }
     }
     case Types.GET_METRICS_DATA_SUCCESS: {
@@ -34,7 +35,7 @@ export default function data(state = INIT_STATE, action) {
       return {
         ...state,
         loadingImgs: true,
-        imgs: [],
+        imgs: null,
       }
     }
     case Types.GET_IMGS_DATA_SUCCESS: {
@@ -49,6 +50,12 @@ export default function data(state = INIT_STATE, action) {
         ...state,
         loadingImgs: false,
         error: action.payload.error,
+      }
+    }
+    case Types.SET_COUNT_TIME: {
+      return {
+        ...state,
+        count: action.payload.count,
       }
     }
     default: return state;

@@ -6,6 +6,8 @@ export const Types = {
   GET_IMGS_DATA_REQUEST: 'GET_IMGS_DATA_REQUEST',
   GET_IMGS_DATA_SUCCESS: 'GET_IMGS_DATA_SUCCESS',
   GET_IMGS_DATA_FAILED: 'GET_IMGS_DATA_FAILED',
+
+  SET_COUNT_TIME: 'SET_COUNT_TIME',
 }
 
 export const getMetricsDataRequest = ({ dt }) => ({
@@ -36,4 +38,9 @@ export const getImagesDataSuccess = ({ data }) => ({
 export const getImagesDataFailed = ({ error }) => ({
   type: Types.GET_IMGS_DATA_FAILED,
   payload: { error }
+})
+
+export const setCountTime = ({ count }) => ({
+  type: Types.SET_COUNT_TIME,
+  payload: { count }
 })

@@ -106,7 +106,7 @@ function ValueLabelComponent(props) {
 const Control = (props) => {
 
   const classes = useStyles();
-  const [time, setTime] = useState(new Date(2019, 10, 12, 0, 0, 0, 0));
+  const [time, setTime] = useState(new Date(2019, 9, 12, 0, 0, 0, 0));
   const [count, setCount] = useState(0);
   const countRef = useRef(count);
   const [pause, setPause] = useState(true);
@@ -129,8 +129,10 @@ const Control = (props) => {
   }, [count, pause]);
 
   useEffect(() => {
-    props.getImagesDataRequest({ dt: '20191012_2120' })
-  }, []);
+    const dt = moment(time).format('YYYYMMDD_HHmm');
+    props.getImagesDataRequest({ dt });
+    props.getMetricsDataRequest({ dt });
+  }, [time]);
 
   return (
     <div style={{
@@ -152,8 +154,8 @@ const Control = (props) => {
         }}>
           <DateTimePicker
             disableFuture
-            minDate={new Date(2019, 10, 12, 0, 0, 0, 0)}
-            maxDate={new Date(2019, 10, 12, 23, 50, 0, 0)}
+            minDate={new Date(2019, 9, 12, 0, 0, 0, 0)}
+            maxDate={new Date(2019, 9, 12, 23, 50, 0, 0)}
             minutesStep={10}
             label='Start Date and Time'
             inputVariant='outlined'
@@ -341,50 +343,37 @@ const Control = (props) => {
           alignItems: 'flex-start',
           overflow: 'auto'
         }}>
-          <div style={{
-            flex: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            height: '100%'
-          }}>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`All RMSE: ...`}
+          {(props.metrics == null) &&
+            <Typography variant='h5' style={{ color: '#FFF' }}>
+              {'<โปรดเลือกช่วงเวลา>'}
             </Typography>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`Rain RMSE: ...`}
-            </Typography>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`NonRain RMSE: ...`}
-            </Typography>
-          </div>
-          <Divider orientation='vertical' style={{ backgroundColor: 'white', marginLeft: 20, marginRight: 20 }} />
-          <div style={{
-            flex: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            height: '100%',
-            marginButtom: 10,
-          }}>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`Binary CSI: ...`}
-            </Typography>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`Non Rain CSI: ...`}
-            </Typography>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`Light Rain CSI: ...`}
-            </Typography>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`Moderate Rain CSI: ...`}
-            </Typography>
-            <Typography variant='body1' style={{ color: '#FFF' }}>
-              {`Heavy Rain CSI: ...`}
-            </Typography>
-          </div>
+          }
+          {(props.metrics != null) &&
+            <>
+              <div style={{
+                flex: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+                height: '100%',
+                marginButtom: 10,
+                overflow: 'auto'
+              }}>
+                {['All RMSE', 'Rain RMSE', 'Non-Rain RMSE'].map((v, i) => (
+                  <Typography key={'rm_' + i} variant='body1' style={{ color: '#FFF' }}>
+                    {`${v}: ${props.metrics['rmse'][i]}`}
+                  </Typography>
+                ))}
+                {['Binary CSI', 'Micro CSI', 'Macro CSI', 'Non Rain CSI',
+                  'Light Rain CSI', 'Moderate Rain CSI', 'Heavy Rain CSI'].map((v, i) => (
+                    <Typography key={'cs_' + i} variant='body1' style={{ color: '#FFF' }}>
+                      {`${v}: ${props.metrics['csi'][i]}`}
+                    </Typography>
+                  ))}
+              </div>
+            </>
+          }
         </div>
       </div>
     </div>
@@ -393,8 +382,6 @@ const Control = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    loadingImgs: state.data.loadingImgs,
-    imgs: state.data.imgs,
     loadingMetrics: state.data.loadingMetrics,
     metrics: state.data.metrics,
   }
