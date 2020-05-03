@@ -52,7 +52,13 @@ export default function data(state = INIT_STATE, action) {
         error: action.payload.error,
       }
     }
-    case Types.SET_COUNT_TIME: {
+    case Types.SET_COUNT_TIME_REQUEST: {
+      return {
+        ...state,
+        count: action.payload.count,
+      }
+    }
+    case Types.SET_COUNT_TIME_SUCCESS: {
       return {
         ...state,
         count: action.payload.count,

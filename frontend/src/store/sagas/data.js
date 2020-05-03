@@ -31,9 +31,21 @@ function* watchFetchImagesData() {
     yield takeEvery(actions.Types.GET_IMGS_DATA_REQUEST, fetchImagesData);
 }
 
+function* setCount(action) {
+    try {
+        yield put(actions.setCountTimeSuccess({ count: action.payload.count }))
+    } catch (e) {
+        
+    }
+}
+function* watchSetCount() {
+    yield takeEvery(actions.Types.SET_COUNT_TIME_REQUEST, setCount);
+}
+
 const DataSagas = [
     fork(watchFetchMetricsData),
     fork(watchFetchImagesData),
+    fork(watchSetCount),
 ];
 
 export default DataSagas;

@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const bound = [[100.006, 20.005], [160.994, 60.9958]];
+const bound = [[118.006, 20.005], [149.994, 60.9958]];
 const imgBounds = [[118.006, 20.005], [149.994, 47.9958]];
 
 const initializeMap = (setMap, mapContainer) => {
@@ -87,26 +87,37 @@ const Maps = (props) => {
     if (props.imgs == null) return;
     if ((gtMap == null) || (predMap == null)) return;
     const maps = [gtMap, predMap];
+    
     ['pred', 'label'].map((v, i) => {
-      maps[i].addSource("img", {
-        "type": "image",
-        "url": "data:image/png;base64," + props.imgs[v][0],
-        "coordinates": [
-          [imgBounds[0][0], imgBounds[1][1]],
-          [imgBounds[1][0], imgBounds[1][1]],
-          [imgBounds[1][0], imgBounds[0][1]],
-          [imgBounds[0][0], imgBounds[0][1]],
-        ]
-      });
+      if (maps[i].getSource('img') != null) {
+        maps[i].getSource('img').updateImage({
+          "url": "data:image/png;base64," + props.imgs[v][props.count - 1],
+        });
+      }
+      else {
+        maps[i].addSource("img", {
+          "type": "image",
+          "url": "data:image/png;base64," + props.imgs[v][props.count],
+          "coordinates": [
+            [imgBounds[0][0], imgBounds[1][1]],
+            [imgBounds[1][0], imgBounds[1][1]],
+            [imgBounds[1][0], imgBounds[0][1]],
+            [imgBounds[0][0], imgBounds[0][1]],
+          ]
+        });
 
-      maps[i].addLayer({
-        "id": "overlay",
-        "source": "img",
-        "type": "raster",
-        "paint": {"raster-opacity": 0.75}
-      });
+        maps[i].addLayer({
+          "id": "overlay",
+          "source": "img",
+          "type": "raster",
+          "paint": {
+            "raster-opacity": 0.9,
+            "raster-fade-duration": 0
+          },
+        });
+      }
     })
-  }, [props.imgs, gtMap, predMap]);
+  }, [props.imgs, gtMap, predMap, props.count]);
 
   return (
     <div>
@@ -125,6 +136,7 @@ const mapStateToProps = (state) => {
   return {
     loadingImgs: state.data.loadingImgs,
     imgs: state.data.imgs,
+    count: state.data.count,
   }
 }
 export default connect(mapStateToProps, {})(Maps);

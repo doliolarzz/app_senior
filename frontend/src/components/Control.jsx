@@ -6,7 +6,7 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import moment from 'moment'
 import { DateTimePicker } from "@material-ui/pickers";
 
-import { getMetricsDataRequest, getImagesDataRequest } from '../store/actions/data';
+import { getMetricsDataRequest, getImagesDataRequest, setCountTimeRequest } from '../store/actions/data';
 
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
@@ -108,7 +108,6 @@ const Control = (props) => {
   const classes = useStyles();
   const [time, setTime] = useState(new Date(2019, 9, 12, 0, 0, 0, 0));
   const [count, setCount] = useState(0);
-  const countRef = useRef(count);
   const [pause, setPause] = useState(true);
   const cellHeight = 150;
 
@@ -118,12 +117,15 @@ const Control = (props) => {
     }
     if (count < 0) {
       setCount(0);
+      props.setCountTimeRequest({ count: 0 });
     }
-    if (count > 18) {
+    if (count > 17) {
       setCount(1);
+      props.setCountTimeRequest({ count: 1 });
     }
     const intervalId = setInterval(() => {
       setCount(count + 1);
+      props.setCountTimeRequest({ count: count + 1 });
     }, 750);
     return () => clearInterval(intervalId);
   }, [count, pause]);
@@ -132,7 +134,7 @@ const Control = (props) => {
     const dt = moment(time).format('YYYYMMDD_HHmm');
     props.getImagesDataRequest({ dt });
     props.getMetricsDataRequest({ dt });
-  }, [time]);
+  }, [])
 
   return (
     <div style={{
@@ -171,6 +173,14 @@ const Control = (props) => {
             startIcon={<ImageSearchIcon />}
             className={classes.searchBtn}
             size='large'
+            onClick={() => {
+              if (time != null) {
+                const dt = moment(time).format('YYYYMMDD_HHmm');
+                props.getImagesDataRequest({ dt });
+                props.getMetricsDataRequest({ dt });
+                setCount(0);
+              }
+            }}
           >
             {'Display'}
           </Button>
@@ -386,4 +396,4 @@ const mapStateToProps = (state) => {
     metrics: state.data.metrics,
   }
 }
-export default connect(mapStateToProps, { getMetricsDataRequest, getImagesDataRequest })(Control);
+export default connect(mapStateToProps, { getMetricsDataRequest, getImagesDataRequest, setCountTimeRequest })(Control);
