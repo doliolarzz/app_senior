@@ -88,7 +88,7 @@ const Maps = (props) => {
     if ((gtMap == null) || (predMap == null)) return;
     const maps = [gtMap, predMap];
     
-    ['pred', 'label'].map((v, i) => {
+    ['label', 'pred'].map((v, i) => {
       if (maps[i].getSource('img') != null) {
         maps[i].getSource('img').updateImage({
           "url": "data:image/png;base64," + props.imgs[v][props.count - 1],

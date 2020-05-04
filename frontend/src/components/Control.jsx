@@ -371,13 +371,13 @@ const Control = (props) => {
                 overflow: 'auto'
               }}>
                 {['All RMSE', 'Rain RMSE', 'Non-Rain RMSE'].map((v, i) => (
-                  <Typography key={'rm_' + i} variant='body1' style={{ color: '#FFF' }}>
+                  <Typography key={'rm_' + i} variant='h6' style={{ color: '#FFF' }}>
                     {`${v}: ${props.metrics['rmse'][i]}`}
                   </Typography>
                 ))}
                 {['Binary CSI', 'Micro CSI', 'Macro CSI', 'Non Rain CSI',
                   'Light Rain CSI', 'Moderate Rain CSI', 'Heavy Rain CSI'].map((v, i) => (
-                    <Typography key={'cs_' + i} variant='body1' style={{ color: '#FFF' }}>
+                    <Typography key={'cs_' + i} variant='h6' style={{ color: '#FFF' }}>
                       {`${v}: ${props.metrics['csi'][i]}`}
                     </Typography>
                   ))}
