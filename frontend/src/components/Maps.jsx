@@ -92,7 +92,7 @@ const Maps = (props) => {
     ['label', 'pred'].map((v, i) => {
       if (maps[i].getSource('img') != null) {
         maps[i].getSource('img').updateImage({
-          "url": "data:image/png;base64," + props.imgs[v][props.count - 1],
+          "url": "data:image/png;base64," + props.imgs[v][props.count],
         });
       }
       else {

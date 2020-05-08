@@ -111,21 +111,23 @@ const Control = (props) => {
   const [pause, setPause] = useState(true);
   const cellHeight = 150;
 
+  const handleSetCount = (c) => {
+    setCount(c)
+    props.setCountTimeRequest({ count: c })
+  }
+
   useEffect(() => {
     if (pause) {
       return;
     }
     if (count < 0) {
-      setCount(0);
-      props.setCountTimeRequest({ count: 0 });
+      handleSetCount(0);
     }
     if (count > 17) {
-      setCount(1);
-      props.setCountTimeRequest({ count: 1 });
+      handleSetCount(1);
     }
     const intervalId = setInterval(() => {
-      setCount(count + 1);
-      props.setCountTimeRequest({ count: count + 1 });
+      handleSetCount(count + 1);
     }, 750);
     return () => clearInterval(intervalId);
   }, [count, pause]);
@@ -178,7 +180,7 @@ const Control = (props) => {
                 const dt = moment(time).format('YYYYMMDD_HHmm');
                 props.getImagesDataRequest({ dt });
                 props.getMetricsDataRequest({ dt });
-                setCount(0);
+                handleSetCount(0);
               }
             }}
           >
@@ -330,14 +332,14 @@ const Control = (props) => {
             alignItems: 'center',
             marginTop: 15,
           }}>
-            <IconButton onClick={() => setCount(count - 1)} style={{ color: 'white' }}>
+            <IconButton onClick={() => handleSetCount(count - 1)} style={{ color: 'white' }}>
               <Replay10Icon />
             </IconButton>
             <IconButton onClick={() => setPause(!pause)} style={{ color: 'white' }}>
               {pause && <PlayArrowIcon />}
               {!pause && <PauseIcon />}
             </IconButton>
-            <IconButton onClick={() => setCount(count + 1)} style={{ color: 'white' }}>
+            <IconButton onClick={() => handleSetCount(count + 1)} style={{ color: 'white' }}>
               <Forward10Icon />
             </IconButton>
           </div>
