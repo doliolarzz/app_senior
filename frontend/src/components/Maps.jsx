@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from 'react-redux';
+import { Dialog, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -121,6 +122,9 @@ const Maps = (props) => {
 
   return (
     <div>
+      <Dialog open={props.loadingImgs}>
+        <CircularProgress style={{ margin: 20 }} />
+      </Dialog>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div className={classes.map} ref={el => (gtMapContainer.current = el)} style={{ display: (props.multiView == 'multi') || (props.mapView == 'gt') ? null : 'none' }} />
         {props.multiView == 'multi' &&
