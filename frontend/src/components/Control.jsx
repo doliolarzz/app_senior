@@ -319,7 +319,7 @@ const Control = (props) => {
             ValueLabelComponent={ValueLabelComponent}
             valueLabelFormat={(value) => {
               if (time != null)
-                return moment(time).add(value * 10, 'minutes').format('ddd DD MMM YYYY HH:mm');
+                return moment(time).add(count * 10, 'minutes').format('ddd DD MMM YYYY HH:mm');
               else
                 return '';
             }}
@@ -332,14 +332,14 @@ const Control = (props) => {
             alignItems: 'center',
             marginTop: 15,
           }}>
-            <IconButton onClick={() => handleSetCount(count - 1)} style={{ color: 'white' }}>
+            <IconButton onClick={() => handleSetCount(Math.max(count - 1, 0))} style={{ color: 'white' }}>
               <Replay10Icon />
             </IconButton>
             <IconButton onClick={() => setPause(!pause)} style={{ color: 'white' }}>
               {pause && <PlayArrowIcon />}
               {!pause && <PauseIcon />}
             </IconButton>
-            <IconButton onClick={() => handleSetCount(count + 1)} style={{ color: 'white' }}>
+            <IconButton onClick={() => handleSetCount(Math.min(count + 1, 17))} style={{ color: 'white' }}>
               <Forward10Icon />
             </IconButton>
           </div>
